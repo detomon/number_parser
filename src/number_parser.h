@@ -91,6 +91,7 @@ typedef struct {
 	uint8_t exp_sign:1; ///< Exponent sign; 0: positive, 1: negative.
 	uint8_t is_float:1; ///< Number type; 0: integer, 1: floating-point.
 	uint8_t has_exp:1;  ///< Has exponent.
+	uint8_t was_int:1;  ///< Set to 1 if integer was converted to float because of overflow.
 	union {
 		int64_t ival;   ///< Signed integer value.
 		uint64_t uval;  ///< Unsigned integer value.

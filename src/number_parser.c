@@ -27,9 +27,10 @@
 #define MAX_EXP (-DBL_MIN_10_EXP)
 #define MAX_LEN INT16_MAX
 
-static void convert_to_float(number_parser* parser) {
+static void convert_to_float(number_parser* parser, int was_int) {
 	if (!parser->is_float) {
 		parser->is_float = 1;
+		parser->was_int = was_int;
 		parser->fval = parser->uval;
 	}
 }
@@ -42,7 +43,7 @@ void number_parser_add_digit(number_parser* parser, int digit) {
 	if (!parser->is_float) {
 		// check if there is room for another digit, otherwise convert to float
 		if (parser->uval > MAX_INT / parser->base) {
-			convert_to_float(parser);
+			convert_to_float(parser, 1);
 		}
 	}
 
@@ -52,7 +53,7 @@ void number_parser_add_digit(number_parser* parser, int digit) {
 		// convert to float if integer value is greater than the maximum
 		// representable negative value
 		if (parser->uval > MAX_INT - digit) {
-			convert_to_float(parser);
+			convert_to_float(parser, 1);
 			parser->fval += digit;
 		}
 		else {
@@ -79,8 +80,12 @@ int number_parser_end(number_parser* parser) {
 	// negative counterpart, it cannot be represented as a signed integer if
 	// its value is greater or equal as such. So convert to a floating-point
 	// value. Also convert if an exponent or the radix point is set.
-	if ((!parser->sign && parser->uval > MAX_POS_INT) || parser->has_exp || parser->rad_off >= 0) {
-		convert_to_float(parser);
+	if ((!parser->sign && parser->uval > MAX_POS_INT)) {
+		convert_to_float(parser, 1);
+	}
+
+	if (parser->has_exp || parser->rad_off >= 0) {
+		convert_to_float(parser, 0);
 	}
 
 	if (parser->is_float) {
