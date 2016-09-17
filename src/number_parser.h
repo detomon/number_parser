@@ -1,5 +1,6 @@
 /*
  * Copyright (c) 2016 Simon Schoenenberger
+ * https://github.com/detomon/number_parser
  *
  * Permission is hereby granted, free of charge, to any person obtaining
  * a copy of this software and associated documentation files (the "Software"),
