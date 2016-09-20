@@ -6,6 +6,7 @@
 *.o
 *.trs
 .deps
+.DS_Store
 /aclocal.m4
 /ar-lib
 /compile
